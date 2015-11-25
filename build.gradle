@@ -1,9 +1,5 @@
-apply plugin: "idea"
 apply plugin: "java"
-apply plugin: "eclipse"
-apply plugin: 'application'
 apply plugin: 'jacoco'
-apply plugin: "sonar-runner"
 apply plugin: 'scala'
 
 
@@ -16,33 +12,22 @@ repositories {
 
 dependencies {
 
-    runtime "org.scala-lang:scala-compiler:2.10.3+"
-    compile "org.scala-lang:scala-library:2.10.3+"
+    runtime "org.scala-lang:scala-compiler:2.11.7"
+    compile "org.scala-lang:scala-library:2.11.7"
 
-    testCompile "junit:junit:4.11+"
-    testCompile "org.scalatest:scalatest_2.10:2.0+"
+    testCompile "junit:junit:4.11"
+    testCompile "org.scalatest:scalatest_2.11:2.2.4"
 }
 
-mainClassName = "com.example.integration.Main"
-version = "1.0.0.42"
-description = "Trying to integrate gradle, sonar and jacoco"
 
 
-sonarRunner {
-    sonarProperties {
-
-        property "sonar.projectName", "gradle-sonar-java-jacoco-scalatest-junit "
-        property "sonar.host.url", "http://${rootProject.properties['sonarHostName']}:9000"
-        property "sonar.login", "${rootProject.properties['sonarWebUserName']}"
-        property "sonar.password", "${rootProject.properties['sonarWebPassword']}"
-
-        property "sonar.jdbc.url", "jdbc:mysql://${rootProject.properties['sonarHostName']}:3306/sonar?useUnicode=true&characterEncoding=utf8"
-        property "sonar.jdbc.driverClassName", "com.mysql.jdbc.Driver"
-        property "sonar.jdbc.username", "${rootProject.properties['sonarDbUserName']}"
-        property "sonar.jdbc.password", "${rootProject.properties['sonarDbPassword']}"
-
-        property "sonar.jacoco.reportPath", "$buildDir/jacoco/test.exec"
-        property "sonar.junit.reportsPath", "$buildDir/test-results/"
-
+jacocoTestReport {
+    reports {
+        //xml.enabled true
+        //csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
     }
 }
+
+
+
