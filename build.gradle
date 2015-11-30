@@ -1,6 +1,14 @@
-apply plugin: "java"
-apply plugin: 'jacoco'
-apply plugin: 'scala'
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.github.maiflai:gradle-scalatest:0.10"
+  }
+}
+
 
 
 
@@ -8,6 +16,11 @@ repositories {
 	jcenter()
 	mavenCentral()
 }
+
+apply plugin: "java"
+apply plugin: "jacoco"
+apply plugin: "scala"
+apply plugin: "com.github.maiflai.scalatest"
 
 
 dependencies {
@@ -17,9 +30,20 @@ dependencies {
 
     testCompile "junit:junit:4.11"
     testCompile "org.scalatest:scalatest_2.11:2.2.4"
+    testRuntime 'org.pegdown:pegdown:1.1.0'
 }
 
+test {
 
+  doFirst {
+    if (jacoco.enabled) {
+    println "[[[${jacoco.getAsJvmArg()}]]]" 
+      jvmArgs jacoco.getAsJvmArg()
+    }
+  }
+
+  maxParallelForks = 1
+}
 
 jacocoTestReport {
     reports {
